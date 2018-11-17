@@ -70,7 +70,7 @@ public class RecipeRepository {
     }
   }
 
-  Recipe query(long recipeId) {
+  public Recipe query(long recipeId) {
     RecipeRecord recipeRecord = create.selectFrom(RECIPE)
                                       .where(RECIPE.RECIPE_ID.eq(recipeId))
                                       .fetchOne();
@@ -100,7 +100,7 @@ public class RecipeRepository {
     }
   }
 
-  List<OverviewRecipe> overviewQuery() {
+  public List<OverviewRecipe> overviewQuery() {
     return create.select(RECIPE.RECIPE_ID, RECIPE.NAME)
                  .from(RECIPE)
                  .fetch()

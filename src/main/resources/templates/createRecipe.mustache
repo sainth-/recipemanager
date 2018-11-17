@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en">
+<body>
+<h1>Neues Rezept</h1>
+  <div class="container">
+    <form action="/createRecipe" method="post">
+      <div class="form-group">
+        <label for="name">Name:</label><input type="text" class="form-control" id="name" name="name" /><br>
+        <label for="description">Beschreibung:</label><textarea id="description" name="description"></textarea><br>
+        <label for="portions">Anzahl Portionen:</label><input type="text" class="form-control" id="portions" name="portions" />
+      </div>
+      <button type="submit" class="btn btn-primary">Speichern</button>
+    </form>
+  </div>
+</body>
+</html>

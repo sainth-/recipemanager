@@ -1,6 +1,7 @@
 package de.sainth.recipemanager.db.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Recipe implements Serializable {
@@ -28,6 +29,8 @@ public class Recipe implements Serializable {
   public Recipe(String name, short portions) {
     this.name = name;
     this.portions = portions;
+    this.ingredients = new ArrayList<>();
+    this.directions = new ArrayList<>();
   }
 
   public String getName() {
