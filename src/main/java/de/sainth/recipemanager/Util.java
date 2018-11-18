@@ -15,25 +15,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package de.sainth.recipemanager.db.model;
+package de.sainth.recipemanager;
 
-import java.io.Serializable;
-import java.util.Objects;
-
-public class Unit implements Serializable {
-  private final String name;
-
-  public Unit(String name) {
-    Objects.requireNonNull(name);
-    this.name = name;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  @Override
-  public String toString() {
-    return name;
+class Util {
+  static boolean isNullOrEmpty(String string) {
+    return string == null || string.isEmpty() || string.trim().isEmpty();
   }
 }

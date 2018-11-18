@@ -67,4 +67,16 @@ public class Ingredient implements Serializable {
   public void setUnit(Unit unit) {
     this.unit = unit;
   }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder(foodName);
+    if (amount != null && !amount.equals(BigDecimal.ZERO)) {
+      sb.append(" ");
+      sb.append(amount.setScale(2, BigDecimal.ROUND_DOWN));
+      sb.append(" ");
+      sb.append(unit.getName());
+    }
+    return sb.toString();
+  }
 }

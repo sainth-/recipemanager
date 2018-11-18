@@ -63,9 +63,9 @@ public class RecipeRepository {
     }
   }
 
-  public void remove(Recipe recipe) {
+  public void remove(long recipeId) {
     create.deleteFrom(RECIPE)
-          .where(RECIPE.RECIPE_ID.eq(recipe.getRecipeId()))
+          .where(RECIPE.RECIPE_ID.eq(recipeId))
           .execute();
   }
 
@@ -98,7 +98,9 @@ public class RecipeRepository {
                                            .map(record -> new Ingredient(record.getIngredientId(),
                                                                          record.getFoodName(),
                                                                          record.getAmount(),
-                                                                         new Unit(record.getUnitName())));
+                                                                         record.getUnitName() != null
+                                                                         ? new Unit(record.getUnitName())
+                                                                         : null));
 
       List<Direction> directions = create.selectFrom(DIRECTION)
                                          .where(DIRECTION.RECIPE_ID.eq(recipeId))
@@ -123,7 +125,7 @@ public class RecipeRepository {
                  .fetch()
                  .map(record -> new OverviewRecipe(record.value1(), record.value2()));
   }
-  
+
   private void deleteIngredients(Configuration configuration, long recipeId) {
     DSL.using(configuration)
        .deleteFrom(INGREDIENT)

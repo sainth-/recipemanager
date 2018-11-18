@@ -7,5 +7,15 @@
   <li>Beschreibung: {{recipe.description}}</li>
   <li>Anzahl Portionen: {{recipe.portions}}</li>
 </ul>
+<ul>
+  {{#recipe.ingredients}}
+    <li>{{toString}}</li>
+  {{/recipe.ingredients}}
+</ul>
+<ol>
+  {{#recipe.directions}}
+    <li>{{description}}</li>
+  {{/recipe.directions}}
+</ol>
 </body>
 </html>

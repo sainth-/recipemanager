@@ -17,10 +17,17 @@
 
 package de.sainth.recipemanager;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import de.sainth.recipemanager.db.RecipeRepository;
+import de.sainth.recipemanager.db.UnitDao;
+import de.sainth.recipemanager.db.model.Direction;
+import de.sainth.recipemanager.db.model.Ingredient;
 import de.sainth.recipemanager.db.model.Recipe;
+import de.sainth.recipemanager.db.model.Unit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,10 +41,12 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/recipe")
 public class RecipeController {
   private final RecipeRepository recipeRepository;
+  private final UnitDao unitDao;
 
   @Autowired
-  public RecipeController(RecipeRepository recipeRepository) {
+  public RecipeController(RecipeRepository recipeRepository, UnitDao unitDao) {
     this.recipeRepository = recipeRepository;
+    this.unitDao = unitDao;
   }
 
   @GetMapping("/show")
@@ -48,15 +57,45 @@ public class RecipeController {
   }
 
   @GetMapping("/create")
-  public String createRecipe() {
-    return "createRecipe";
+  public ModelAndView createRecipe(Map<String, Object> model) {
+    List<Unit> units = unitDao.query();
+    model.put("units", units);
+    return new ModelAndView("createRecipe", model);
   }
 
   @PostMapping("/create")
-  public String authenticate(@RequestParam Map<String, String> map) {
+  public String create(@RequestParam Map<String, String> map) {
     Recipe recipe = new Recipe(map.get("name"), Short.valueOf(map.get("portions")));
     recipe.setDescription(map.get("description"));
+    List<Ingredient> ingredients = new ArrayList<>();
+    for (int i = 1; i <= 20; i++) {
+      String food = map.get("food" + i);
+      if (!Util.isNullOrEmpty(food)) {
+        Ingredient ingredient = new Ingredient(food);
+        String amountString = map.get("amount" + i);
+        if (!Util.isNullOrEmpty(amountString)) {
+          ingredient.setAmount(new BigDecimal(amountString));
+          ingredient.setUnit(new Unit(map.get("unit" + i)));
+        }
+        ingredients.add(ingredient);
+      }
+    }
+    recipe.setIngredients(ingredients);
+    List<Direction> directions = new ArrayList<>();
+    for (short i = 1; i <= 20; i++) {
+      String direction = map.get("direction" + i);
+      if (!Util.isNullOrEmpty(direction)) {
+        directions.add(new Direction(i, direction));
+      }
+    }
+    recipe.setDirections(directions);
     recipeRepository.add(recipe);
+    return "redirect:/";
+  }
+
+  @GetMapping("/delete")
+  public String delete(@RequestParam long id) {
+    recipeRepository.remove(id);
     return "redirect:/";
   }
 }
