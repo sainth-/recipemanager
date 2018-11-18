@@ -19,6 +19,7 @@ package de.sainth.recipemanager.db;
 
 import static de.sainth.recipemanager.db.generated.tables.Unit.UNIT;
 
+import java.util.List;
 import java.util.Objects;
 
 import de.sainth.recipemanager.db.model.Unit;
@@ -34,6 +35,12 @@ public class UnitDao {
   @Autowired
   public UnitDao(DSLContext create) {
     this.create = create;
+  }
+
+  public List<Unit> query() {
+    return create.selectFrom(UNIT)
+                 .fetch()
+                 .map(record -> new Unit(record.getUnitName()));
   }
 
   public void create(Unit unit) {
