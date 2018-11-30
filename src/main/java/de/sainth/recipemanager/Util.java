@@ -19,6 +19,6 @@ package de.sainth.recipemanager;
 
 class Util {
   static boolean isNullOrEmpty(String string) {
-    return string == null || string.isEmpty() || string.trim().isEmpty();
+    return string == null || string.trim().isEmpty();
   }
 }

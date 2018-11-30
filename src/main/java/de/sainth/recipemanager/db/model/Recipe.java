@@ -23,9 +23,9 @@ import java.util.List;
 
 public class Recipe implements Serializable {
   private Long recipeId;
-  private final String name;
+  private String name;
   private String description;
-  private final short portions;
+  private short portions;
   private List<Ingredient> ingredients;
   private List<Direction> directions;
 
@@ -50,8 +50,17 @@ public class Recipe implements Serializable {
     this.directions = new ArrayList<>();
   }
 
+  public Recipe() {
+    this.ingredients = new ArrayList<>();
+    this.directions = new ArrayList<>();
+  }
+
   public String getName() {
     return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
   }
 
   public Long getRecipeId() {

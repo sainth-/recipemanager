@@ -1,0 +1,43 @@
+<!--
+  ~ Copyright (C) 2018 Tobias Wink <sainth@sainth.de>
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Dein Rezeptemanager</title>
+</head>
+<body>
+<h1>Dein Rezeptemanager</h1>
+<a href="/">Zurück</a>
+<div class="container">
+  <div>
+    <form action="#" th:action="@{/unit/create}" th:object="${unit}" method="post" >
+      <div class="form-group">
+        <label th:for="name">Name:</label><input type="text" class="form-control" th:field="*{name}"/><br>
+      </div>
+      <button type="submit" class="btn btn-primary">Speichern</button>
+    </form>
+  </div>
+  <div>
+    <ul>
+      <li th:each="unit : ${units}"><label th:text="${unit.name}"></label> <a th:href="@{/unit/delete(name=${unit.name})}" th:text="Löschen"></a></li>
+    </ul>
+  </div>
+</div>
+</body>
+</html>

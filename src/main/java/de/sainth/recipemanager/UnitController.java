@@ -28,6 +28,7 @@ import de.sainth.recipemanager.db.model.Unit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -47,19 +48,18 @@ public class UnitController {
   public ModelAndView index(Map<String, Object> model) {
     List<Unit> units = unitDao.query();
     model.put("units", units);
+    model.put("unit", new Unit());
     return new ModelAndView("unit/show", model);
   }
 
   @PostMapping("/create")
-  public String create(@RequestParam Map<String, String> map) {
-    Unit unit = new Unit(map.get("name"));
+  public String create(@ModelAttribute Unit unit) {
     unitDao.create(unit);
     return "redirect:/unit/show";
   }
 
   @GetMapping("/delete")
-  public String delete(@RequestParam String name) {
-    Unit unit = new Unit(name);
+  public String delete(@ModelAttribute Unit unit) {
     unitDao.delete(unit);
     return "redirect:/unit/show";
   }

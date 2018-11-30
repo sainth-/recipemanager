@@ -21,7 +21,11 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class Unit implements Serializable {
-  private final String name;
+  private String name;
+
+  public Unit() {
+
+  }
 
   public Unit(String name) {
     Objects.requireNonNull(name);
@@ -30,6 +34,10 @@ public class Unit implements Serializable {
 
   public String getName() {
     return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
   }
 
   @Override

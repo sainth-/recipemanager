@@ -17,8 +17,6 @@
 
 package de.sainth.recipemanager;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +30,7 @@ import de.sainth.recipemanager.db.model.Unit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -56,46 +55,68 @@ public class RecipeController {
     return new ModelAndView("showRecipe", model);
   }
 
-  @GetMapping("/create")
-  public ModelAndView createRecipe(Map<String, Object> model) {
+  @GetMapping("/edit")
+  public ModelAndView editRecipe(@RequestParam long id, Map<String, Object> model) {
+    Recipe recipe = recipeRepository.query(id);
+    padIngredients(recipe.getIngredients(), (short) 20);
+    padDirections(recipe.getDirections(), (short) 20);
+    model.put("recipe", recipe);
     List<Unit> units = unitDao.query();
     model.put("units", units);
     return new ModelAndView("createRecipe", model);
   }
 
+  @GetMapping("/create")
+  public ModelAndView createRecipe(Map<String, Object> model) {
+    List<Unit> units = unitDao.query();
+    model.put("units", units);
+    Recipe recipe = new Recipe();
+    padIngredients(recipe.getIngredients(), (short) 20);
+    padDirections(recipe.getDirections(), (short) 20);
+    model.put("recipe", recipe);
+    return new ModelAndView("createRecipe", model);
+  }
+
   @PostMapping("/create")
-  public String create(@RequestParam Map<String, String> map) {
-    Recipe recipe = new Recipe(map.get("name"), Short.valueOf(map.get("portions")));
-    recipe.setDescription(map.get("description"));
-    List<Ingredient> ingredients = new ArrayList<>();
-    for (int i = 1; i <= 20; i++) {
-      String food = map.get("food" + i);
-      if (!Util.isNullOrEmpty(food)) {
-        Ingredient ingredient = new Ingredient(food);
-        String amountString = map.get("amount" + i);
-        if (!Util.isNullOrEmpty(amountString)) {
-          ingredient.setAmount(new BigDecimal(amountString));
-          ingredient.setUnit(new Unit(map.get("unit" + i)));
-        }
-        ingredients.add(ingredient);
+  public String create(@ModelAttribute Recipe recipe) {
+    final List<Ingredient> ingredients = recipe.getIngredients();
+    for (int i = 0; i < ingredients.size(); i++) {
+      if (Util.isNullOrEmpty(ingredients.get(i).getFoodName())) {
+        ingredients.remove(i--);
       }
     }
-    recipe.setIngredients(ingredients);
-    List<Direction> directions = new ArrayList<>();
-    for (short i = 1; i <= 20; i++) {
-      String direction = map.get("direction" + i);
-      if (!Util.isNullOrEmpty(direction)) {
-        directions.add(new Direction(i, direction));
+    final List<Direction> directions = recipe.getDirections();
+    for (int i = 0; i < directions.size(); i++) {
+      if (Util.isNullOrEmpty(directions.get(i).getDescription())) {
+        directions.remove(i--);
       }
     }
-    recipe.setDirections(directions);
-    recipeRepository.add(recipe);
-    return "redirect:/";
+    Long recipeId;
+    if (recipe.getRecipeId() == null) {
+      recipeId = recipeRepository.add(recipe);
+    }
+    else {
+      recipeRepository.update(recipe);
+      recipeId = recipe.getRecipeId();
+    }
+    return "redirect:/recipe/show?id=" + recipeId;
   }
 
   @GetMapping("/delete")
   public String delete(@RequestParam long id) {
     recipeRepository.remove(id);
     return "redirect:/";
+  }
+
+  private void padIngredients(List<Ingredient> ingredients, short cap) {
+    for (int i = ingredients.size(); i < cap; i++) {
+      ingredients.add(new Ingredient());
+    }
+  }
+
+  private void padDirections(List<Direction> directions, short cap) {
+    for (int i = directions.size(); i < cap; i++) {
+      directions.add(new Direction((short) i, ""));
+    }
   }
 }

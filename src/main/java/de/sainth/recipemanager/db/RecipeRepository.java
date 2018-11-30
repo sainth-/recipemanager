@@ -22,6 +22,7 @@ import static de.sainth.recipemanager.db.generated.tables.Ingredient.INGREDIENT;
 import static de.sainth.recipemanager.db.generated.tables.Recipe.RECIPE;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 import de.sainth.recipemanager.db.generated.tables.records.RecipeRecord;
 import de.sainth.recipemanager.db.model.Direction;
@@ -46,8 +47,9 @@ public class RecipeRepository {
     this.create = create;
   }
 
-  public void add(Recipe recipe) {
+  public Long add(Recipe recipe) {
     if (recipe.getRecipeId() == null) {
+      final AtomicLong id = new AtomicLong();
       create.transaction(configuration -> {
         Long recipeId = DSL.using(configuration)
                            .insertInto(RECIPE)
@@ -59,7 +61,12 @@ public class RecipeRepository {
                            .getRecipeId();
         insertIngredients(configuration, recipeId, recipe.getIngredients());
         insertDirections(configuration, recipeId, recipe.getDirections());
+        id.set(recipeId);
       });
+      return id.get();
+    }
+    else {
+      return null;
     }
   }
 

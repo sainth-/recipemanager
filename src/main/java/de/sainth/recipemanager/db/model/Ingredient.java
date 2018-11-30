@@ -22,7 +22,7 @@ import java.math.BigDecimal;
 
 public class Ingredient implements Serializable {
   private long ingredientId;
-  private final String foodName;
+  private String foodName;
   private BigDecimal amount;
   private Unit unit;
 
@@ -34,6 +34,10 @@ public class Ingredient implements Serializable {
     this.foodName = foodName;
     this.amount = amount;
     this.unit = unit;
+  }
+
+  public Ingredient() {
+
   }
 
   public Ingredient(String foodName) {
@@ -50,6 +54,10 @@ public class Ingredient implements Serializable {
 
   public String getFoodName() {
     return foodName;
+  }
+
+  public void setFoodName(String foodName) {
+    this.foodName = foodName;
   }
 
   public BigDecimal getAmount() {

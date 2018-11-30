@@ -22,11 +22,14 @@ import java.math.BigDecimal;
 
 public class Direction implements Serializable {
   private short position;
-  private final String description;
+  private String description;
 
   public Direction(short position, String description) {
     this.position = position;
     this.description = description;
+  }
+
+  public Direction() {
   }
 
   public Direction(String description) {
@@ -43,5 +46,9 @@ public class Direction implements Serializable {
 
   public String getDescription() {
     return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
   }
 }
