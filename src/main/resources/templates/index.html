@@ -17,21 +17,49 @@
 
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="UTF-8">
-  <title>Dein Rezeptemanager</title>
+<head th:replace="/fragments/header :: head">
+  <title>Mein Rezeptemanager</title>
 </head>
 <body>
-<h1>Dein Rezeptemanager</h1>
-<a href="/recipe/create">Neues Rezept</a>
-<a href="/unit/show">Maßeinheiten</a>
-<div class="container">
-  <ul>
-    <li th:each="recipe : ${recipes}">
-      <a th:href="@{/recipe/show(id=${recipe.recipeId})}" th:text="${recipe.name}"></a> <a
-        th:href="@{/recipe/delete(id=${recipe.recipeId})}" th:text="Löschen"></a>
-    </li>
-  </ul>
+<nav th:replace="/fragments/header :: header"></nav>
+<div class="lead">
+  <section class="section">
+    <div class="container">
+      <h1 class="title">Rezepte</h1>
+      <table class="table is-fullwidth is-hoverable">
+        <thead>
+        <tr>
+          <th>Rezeptname</th>
+          <th>Aktionen</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="recipe : ${recipes}">
+          <td>
+            <a th:href="@{/recipe/show(id=${recipe.recipeId})}" th:text="${recipe.name}"></a>
+          </td>
+          <td>
+            <a th:href="@{/recipe/edit(id=${recipe.recipeId})}"><i class="fas fa-edit"></i></a>
+            <a th:href="@{/recipe/delete(id=${recipe.recipeId})}"><i class="fas fa-trash-alt"></i></a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
 </div>
+<script>document.addEventListener('DOMContentLoaded', () => {
+  const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+  if ($navbarBurgers.length > 0) {
+    $navbarBurgers.forEach(el => {
+      el.addEventListener('click', () => {
+        const target = el.dataset.target;
+        const $target = document.getElementById(target);
+        el.classList.toggle('is-active');
+        $target.classList.toggle('is-active');
+      });
+    });
+  }
+});</script>
 </body>
 </html>

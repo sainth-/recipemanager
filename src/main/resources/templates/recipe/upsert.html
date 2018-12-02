@@ -1,0 +1,120 @@
+<!--
+  ~ Copyright (C) 2018 Tobias Wink <sainth@sainth.de>
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: head">
+  <title>Mein Rezeptemanager</title>
+</head>
+<body>
+<nav th:replace="fragments/header :: header"></nav>
+<div class="lead">
+  <section class="section">
+    <div class="container">
+      <h1 class="title is-1">Neues Rezept</h1>
+      <form action="#" th:action="@{/recipe/create}" th:object="${recipe}" method="post">
+        <input th:if="${recipe.recipeId != null}" type="hidden" th:field="*{recipeId}"/>
+        <div class="field is-horizontal">
+          <div class="field-label">
+            <label class="label">Name</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <div class="control">
+                <input class="input" type="text" placeholder="Name" th:field="*{name}">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="field is-horizontal">
+          <div class="field-label">
+            <label class="label">Beschreibung</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <div class="control">
+                <textarea class="textarea" placeholder="Beschreibung" th:field="*{description}"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="field is-horizontal">
+          <div class="field-label">
+            <label class="label">Anzahl Portionen</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <div class="control">
+                <input class="input" type="text" style="text-align: right" th:field="*{portions}">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field is-horizontal" th:each="ingredient, itemStat : ${recipe.ingredients}">
+          <div class="field-label">
+            <label class="label">Zutat</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <p class="control">
+                <input class="input" type="text" placeholder="Zutat"
+                       th:field="*{ingredients[__${itemStat.index}__].foodName}">
+              </p>
+            </div>
+            <div class="field has-addons">
+              <p class="control">
+                <input class="input" type="text" placeholder="Menge"
+                       th:field="*{ingredients[__${itemStat.index}__].amount}">
+              </p>
+              <p class="control select">
+                <select th:field="*{ingredients[__${itemStat.index}__].unit}" size="1">
+                  <option th:each="unit : ${units}" th:value="${unit}" th:text="${unit.name}"></option>
+                </select>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="field is-horizontal" th:each="direction, itemStat : ${recipe.directions}">
+          <div class="field-label">
+            <label class="label">Anweisungen</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <div class="control">
+              <textarea class="textarea" placeholder="Anweisungen"
+                        th:field="*{directions[__${itemStat.index}__].description}"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field is-horizontal">
+          <div class="field-label"></div>
+          <div class="field-body">
+            <div class="control">
+              <button class="button is-primary">Speichern</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+</div>
+</body>
+</html>

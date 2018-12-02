@@ -17,27 +17,40 @@
 
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="UTF-8">
-  <title>Dein Rezeptemanager</title>
+<head th:replace="fragments/header :: head">
+  <title>Mein Rezeptemanager</title>
 </head>
 <body>
-<h1>Dein Rezeptemanager</h1>
-<a href="/">Zurück</a>
-<div class="container">
-  <div>
-    <form action="#" th:action="@{/unit/create}" th:object="${unit}" method="post" >
-      <div class="form-group">
-        <label th:for="name">Name:</label><input type="text" class="form-control" th:field="*{name}"/><br>
+<nav th:replace="fragments/header :: header"></nav>
+<div class="lead">
+  <section class="section">
+    <div class="container">
+      <div>
+        <h2 class="title">Neue Maßeinheit</h2>
+        <form action="#" th:action="@{/unit/create}" th:object="${unit}" method="post">
+          <div class="field is-horizontal is-grouped">
+            <p class="control">
+              <input class="input" type="text" th:field="*{name}" placeholder="Maßeinheit">
+            </p>
+            <p class="control">
+              <button class="button is-primary">Hinzufügen</button>
+            </p>
+          </div>
+        </form>
       </div>
-      <button type="submit" class="btn btn-primary">Speichern</button>
-    </form>
-  </div>
-  <div>
-    <ul>
-      <li th:each="unit : ${units}"><label th:text="${unit.name}"></label> <a th:href="@{/unit/delete(name=${unit.name})}" th:text="Löschen"></a></li>
-    </ul>
-  </div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <h2 class="title">Maßeinheiten</h2>
+      <ul>
+        <li th:each="unit : ${units}">
+          <span class="tag is-medium" th:text="${unit.name}"></span>
+          <a th:href="@{/unit/delete(name=${unit.name})}"><i class="fas fa-trash-alt"></i></a>
+        </li>
+      </ul>
+    </div>
+  </section>
 </div>
 </body>
 </html>

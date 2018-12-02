@@ -26,4 +26,6 @@ public class RecipemanagerApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(RecipemanagerApplication.class, args);
 	}
+
+
 }

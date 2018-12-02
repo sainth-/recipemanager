@@ -52,18 +52,18 @@ public class RecipeController {
   public ModelAndView showRecipe(@RequestParam long id, Map<String, Object> model) {
     Recipe recipe = recipeRepository.query(id);
     model.put("recipe", recipe);
-    return new ModelAndView("showRecipe", model);
+    return new ModelAndView("recipe/show", model);
   }
 
   @GetMapping("/edit")
   public ModelAndView editRecipe(@RequestParam long id, Map<String, Object> model) {
     Recipe recipe = recipeRepository.query(id);
     padIngredients(recipe.getIngredients(), (short) 20);
-    padDirections(recipe.getDirections(), (short) 20);
+    padDirections(recipe.getDirections(), (short) 1);
     model.put("recipe", recipe);
     List<Unit> units = unitDao.query();
     model.put("units", units);
-    return new ModelAndView("createRecipe", model);
+    return new ModelAndView("recipe/upsert", model);
   }
 
   @GetMapping("/create")
@@ -72,9 +72,9 @@ public class RecipeController {
     model.put("units", units);
     Recipe recipe = new Recipe();
     padIngredients(recipe.getIngredients(), (short) 20);
-    padDirections(recipe.getDirections(), (short) 20);
+    padDirections(recipe.getDirections(), (short) 1);
     model.put("recipe", recipe);
-    return new ModelAndView("createRecipe", model);
+    return new ModelAndView("recipe/upsert", model);
   }
 
   @PostMapping("/create")

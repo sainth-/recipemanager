@@ -1,0 +1,15 @@
+$dark-green: hsl(135, 63%, 37%);
+$parchment: hsl(37, 100%, 96%);
+$primary: $dark-green !default;
+$body-background-color: $parchment !default;
+
+.lead {
+  padding: 3rem;
+}
+
+@import "utilities/_all";
+@import "base/_all";
+@import "elements/_all";
+@import "components/_all";
+@import "grid/_all";
+@import "layout/_all";

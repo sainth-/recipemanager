@@ -1,0 +1,62 @@
+<!--
+  ~ Copyright (C) 2018 Tobias Wink <sainth@sainth.de>
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: head">
+  <title>Mein Rezeptemanager</title>
+</head>
+<body>
+<nav th:replace="fragments/header :: header"></nav>
+<div class="lead">
+  <section class="section">
+    <div class="container">
+
+      <h1 class="title is-1">
+        <span th:text="${recipe.name}" th:remove="tag"></span>
+        <a th:href="@{/recipe/edit(id=${recipe.recipeId})}"><i class="fas fa-edit is-size-6"></i></a>
+        <a th:href="@{/recipe/delete(id=${recipe.recipeId})}"><i class="fas fa-trash-alt is-size-6"></i></a>
+      </h1>
+      <h2 class="subtitle is-3" th:text="${recipe.description}"></h2>
+
+      <h2 class="title is-2">Zutaten für <span th:text="${recipe.portions}" th:remove="tag"></span> Portionen</h2>
+      <table class="table is-striped">
+        <thead>
+        <tr>
+          <th>Zutat</th>
+          <th>Menge</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="ingredient : ${recipe.ingredients}">
+          <td th:text="${ingredient.foodName}"></td>
+          <td style="text-align: right">
+            <span th:text="${#numbers.formatDecimal(ingredient.amount, 0, 'DEFAULT', 2, 'DEFAULT')}"></span>
+            <span th:text="${ingredient.unit}"></span>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <h3 class="title is-3">Anweisungen</h3>
+      <ol>
+        <li th:each="direction : ${recipe.directions}" th:text="${direction.description}">
+      </ol>
+    </div>
+  </section>
+</div>
+</body>
+</html>
